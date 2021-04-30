@@ -7,7 +7,7 @@ import com.vaadin.tutorial.crm.backend.entity.Company;
 import com.vaadin.tutorial.crm.backend.entity.Contact;
 import com.vaadin.tutorial.crm.backend.service.ContactService;
 
-@Route("")
+@Route("Contact")
 public class MainView extends VerticalLayout {
 
     Grid<Contact> grid = new Grid<>(Contact.class);
