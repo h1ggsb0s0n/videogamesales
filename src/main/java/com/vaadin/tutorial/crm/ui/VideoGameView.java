@@ -56,7 +56,7 @@ public class VideoGameView extends VerticalLayout {
         minButton.addClickListener(clickEvent -> getLowestSellingBorderlandsGame());
 
         Button collectButton = new Button("collect");
-        collectButton.addClickListener(clickEvent -> getFirst10Ranks());
+        collectButton.addClickListener(clickEvent -> getFirst5Ranks());
 
 
         add(mapButton);
@@ -81,11 +81,13 @@ public class VideoGameView extends VerticalLayout {
     }
 
     /**
+     * map:
      * Die Methode erstellt einen Video Game Namen.
      * Enthält ein Name in Capital Letters um das vorhandensein eines Namen zu testen.
      * Enthält einen Kurznamen zur Darstellung in einem Typeahead.
      */
     private void mapOperation(){
+        System.out.println("map");
         CollectionOperations.CreateVideoGameName(this.listOfVideoGames);
     }
 
@@ -96,25 +98,28 @@ public class VideoGameView extends VerticalLayout {
      *
      */
     private void filterSortLimit(){
+        System.out.println("Filter, Sort, Limit: ");
         CollectionOperations.filterSortLimit(this.listOfVideoGames);
     }
 
 
     /**
+     * Skip:
      * Sortiert nach Rang und Überspringt die ersten 10 Ränge
      */
     private void SkipFirstTenRanks(){
-        System.out.println("Skip First 10 Ranks: ");
+        System.out.println("Skip:  First 10 Ranks: ");
         Collections.shuffle(this.listOfVideoGames);
         CollectionOperations.skipFirstTenRanks(this.listOfVideoGames);
     }
 
 
     /**
+     * Anymatch:
      *  Gibt True auf der Console aus wenn es ein Spiel mit dem Anfangsbuchstaben B enthält
      */
     private void startsWithB(){
-        System.out.println("Is there a Game that starts with B: " + CollectionOperations.videoGameStartsWith(this.listOfVideoGames, "B"));
+        System.out.println("Anymatch: Is there a Game that starts with B: " + CollectionOperations.videoGameStartsWith(this.listOfVideoGames, "B"));
     }
 
 
@@ -122,17 +127,18 @@ public class VideoGameView extends VerticalLayout {
      * Negativ Test: Gibt True wenn ein Spiel mit den Anfangsbuchstaben ASDF gefunden wurde.
      */
     private void startsWithASDF(){
-        System.out.println("Is there a Game that starts with ASDF: " + CollectionOperations.videoGameStartsWith(this.listOfVideoGames, "ASDF"));
+        System.out.println("Anymatch: Is there a Game that starts with ASDF: " + CollectionOperations.videoGameStartsWith(this.listOfVideoGames, "ASDF"));
     }
 
 
     /**
+     * AllMatch:
      * Tested ob alle Borderland Spiele das Genre Shooter haben.
      * Negativ Test -> Assesins creed
      * Gibt true oder False auf der Commandozeile aus.
      */
     private void compareGenreOfBorderlandsGames(){
-        System.out.println("Compare Genre of Borderlands Games");
+        System.out.println("Allmatch: Compare Genre of Borderlands Games");
         List<VideoGame> codGames = vgService.findByNameContaining("Borderlands");
         System.out.println("All Genre the same: " + CollectionOperations.checkIfGenreIsTheSame(codGames, "Shooter"));
         //negativTest
@@ -144,9 +150,11 @@ public class VideoGameView extends VerticalLayout {
     }
 
     /**
+     * Count:
      * Zählt die Anzahl an Borderland Spiele
      */
     private void getCountOfBorderlandsGames(){
+        System.out.println("Count: ");
         List<VideoGame> borderlandsGames = vgService.findByNameContaining("Borderlands");
         System.out.println(CollectionOperations.numberOfGames(borderlandsGames));
 
@@ -154,9 +162,11 @@ public class VideoGameView extends VerticalLayout {
 
 
     /**
+     * Min:
      * Gibt das am wenigsten Verkaufte Borderlands Game auf der Kommandozeile aus.
      */
     private void getLowestSellingBorderlandsGame(){
+        System.out.println("Min: ");
         List<VideoGame> borderlandsGames = vgService.findByNameContaining("Borderlands");
         VideoGame lowestSellingGame = CollectionOperations.getLowestTotalSales(borderlandsGames);
         System.out.println("The lowest selling game in the Borderlands Series is: ");
@@ -164,9 +174,11 @@ public class VideoGameView extends VerticalLayout {
     }
 
     /**
-     * gibt die die 10 meistverkauften Borderlands spiele auf der Kommandozeile aus.
+     * Collect
+     * gibt die die 5 meistverkauften Borderlands spiele auf der Kommandozeile aus.
      */
-    private void getFirst10Ranks(){
+    private void getFirst5Ranks(){
+        System.out.println("Collect: ");
         List<VideoGame> borderlandsGames = vgService.findByNameContaining("Borderlands");
         List<VideoGame> fiveMostPopularBorderlandsGames = CollectionOperations.get5MostPopularResults(borderlandsGames);
         fiveMostPopularBorderlandsGames.forEach(
