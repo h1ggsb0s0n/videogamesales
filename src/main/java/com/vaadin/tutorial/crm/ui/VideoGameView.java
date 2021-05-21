@@ -12,16 +12,24 @@ import com.vaadin.tutorial.crm.backend.entity.VideoGame;
 import com.vaadin.tutorial.crm.backend.service.ContactService;
 import com.vaadin.tutorial.crm.backend.service.VideoGameService;
 import com.vaadin.tutorial.crm.helpers.CollectionOperations;
+import lombok.extern.java.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Route("")
+@Route("videogame")
+@Log
 public class VideoGameView extends VerticalLayout {
 
     private VideoGameService vgService;
 
     private List<VideoGame> listOfVideoGames;
+
+
+
+
+    //private static final java.util.logging.Logger log = java.util.logging.Logger.getLogger(LogExample.class.getName());
 
     public VideoGameView(VideoGameService vgservice) {
         this.vgService = vgservice;
@@ -59,6 +67,7 @@ public class VideoGameView extends VerticalLayout {
         collectButton.addClickListener(clickEvent -> getFirst5Ranks());
 
 
+
         add(mapButton);
         add(filterSortLimit);
         add(skipFirstTenRanksButton);
@@ -69,6 +78,7 @@ public class VideoGameView extends VerticalLayout {
         add(collectButton);
 
     }
+
 
     /**
      * Holt die ersten 1000 Ränge an Video Spielen und shuffled sie damit sie unsortiert getestet werden können
@@ -100,6 +110,7 @@ public class VideoGameView extends VerticalLayout {
     private void filterSortLimit(){
         System.out.println("Filter, Sort, Limit: ");
         CollectionOperations.filterSortLimit(this.listOfVideoGames);
+        log.severe("Log filter Sort Limit");
     }
 
 

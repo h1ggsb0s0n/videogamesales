@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,6 +86,14 @@ public class CollectionOperations {
     //Collect
     public static List<VideoGame> get5MostPopularResults(List<VideoGame> col) {
         return  col.stream().sorted(Comparator.comparing(VideoGame::getRank)).limit(5).collect(Collectors.toList());
+    }
+
+    //gets 5 MostFrequentGenres
+    public static List<String> get5MostFrequentGenres(List<VideoGame> videoGames){
+        Map<String, Long> count = videoGames.stream().collect(Collectors.groupingBy(VideoGame::getGenre, Collectors.counting()));
+
+        return count.entrySet().stream().sorted((v1, v2) -> v2.getValue().compareTo(v1.getValue())).limit(5).map(Map.Entry::getKey).collect(Collectors.toList());
+
     }
 
 

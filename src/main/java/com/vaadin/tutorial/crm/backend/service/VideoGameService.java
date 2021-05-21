@@ -1,6 +1,7 @@
 package com.vaadin.tutorial.crm.backend.service;
 
 import com.vaadin.tutorial.crm.backend.entity.Company;
+import com.vaadin.tutorial.crm.backend.entity.Contact;
 import com.vaadin.tutorial.crm.backend.entity.VideoGame;
 import com.vaadin.tutorial.crm.backend.repository.CompanyRepository;
 import com.vaadin.tutorial.crm.backend.repository.VideoGameRepository;
@@ -30,4 +31,9 @@ public class VideoGameService {
     public List<VideoGame> findByNameContaining(String videoGameName){
         return  vgRepostitory.findByNameContaining(videoGameName);
     };
+
+
+    public List<VideoGame> findAll() {
+        return vgRepostitory.findAll();
+    }
 }
