@@ -93,7 +93,14 @@ public class CollectionOperations {
         Map<String, Long> count = videoGames.stream().collect(Collectors.groupingBy(VideoGame::getGenre, Collectors.counting()));
 
         return count.entrySet().stream().sorted((v1, v2) -> v2.getValue().compareTo(v1.getValue())).limit(5).map(Map.Entry::getKey).collect(Collectors.toList());
+    }
 
+
+    public static List<VideoGame> findByRangeYear(int yearFrom, int yearTo, List<VideoGame> col){
+         return col.stream()
+                .filter(vg -> vg.getYear() >= yearFrom)
+                .filter(vg -> vg.getYear() <= yearTo)
+                .collect(Collectors.toList());
     }
 
 

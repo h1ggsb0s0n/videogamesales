@@ -32,6 +32,10 @@ public class VideoGameService {
         return  vgRepostitory.findByNameContaining(videoGameName);
     };
 
+    public List<VideoGame> findByGenreContaining(String videoGameName){
+        return  vgRepostitory.findByGenreContaining(videoGameName);
+    };
+
 
     public List<VideoGame> findAll() {
         return vgRepostitory.findAll();

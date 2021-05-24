@@ -1,20 +1,16 @@
 package com.vaadin.tutorial.crm.ui;
 
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
-import com.vaadin.tutorial.crm.backend.entity.Company;
-import com.vaadin.tutorial.crm.backend.entity.Contact;
 import com.vaadin.tutorial.crm.backend.entity.VideoGame;
 import com.vaadin.tutorial.crm.backend.service.VideoGameService;
 import com.vaadin.tutorial.crm.helpers.CollectionOperations;
@@ -24,10 +20,10 @@ import java.util.List;
 public class SearchForm extends FormLayout {
 
     TextField filterNameTextField = new TextField("Search by Video Game Name");
-    TextField yearFromTextField  = new TextField("Year from:");
-    TextField yearToTextField  = new TextField("Year to:");
-    Button searchFromYearToYearButton = new Button("Search From-To Sales");
-    ComboBox<String> genre = new ComboBox<>("Top 5: Most Frequent Genres");
+    IntegerField yearFromIntegerField  = new IntegerField("Year from:");
+    IntegerField yearToIntegerField  = new IntegerField("Year to:");
+    Button searchFromYearToYearButton = new Button("Search From-To Year");
+    ComboBox<String> genreComboBox = new ComboBox<>("Top 5: Most Frequent Genres");
 
 
     private Grid<VideoGame> grid;
@@ -37,54 +33,98 @@ public class SearchForm extends FormLayout {
     public SearchForm(Grid<VideoGame> grid, VideoGameService vgService){
         this.grid = grid;
         this.vgService = vgService;
-        addClassName("contact-form");
-        CollectionOperations.get5MostFrequentGenres(vgService.findAll());
-        genre.setItems(CollectionOperations.get5MostFrequentGenres(vgService.findAll()));
+        addClassName("search-form");
+        genreComboBox.setItems(CollectionOperations.get5MostFrequentGenres(vgService.findAll()));
 
         add(
                 filterNameTextField,
-                yearFromTextField,
-                yearToTextField,
+                yearFromIntegerField,
+                yearToIntegerField,
                 searchFromYearToYearButton,
-                genre,
-                createButtonsLayout()
+                genreComboBox,
+                addLayout()
         );
 
 
-        this.setFilterOnSearchByNameTextField();
-
-
-
-    }
-
-    private Component createButtonsLayout() {
-
-
-
-        searchFromYearToYearButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-
-        //searchFromYearToYearButton.addClickListener(click -> validateAndSave());
-
-        //binder.addStatusChangeListener(evt -> save.setEnabled(binder.isValid()));
-
-        return new HorizontalLayout(filterNameTextField, yearFromTextField, yearToTextField, searchFromYearToYearButton);
-    }
-
-
-    private void setFilterOnSearchByNameTextField(){
         filterNameTextField.setClearButtonVisible(true);
         filterNameTextField.setValueChangeMode(ValueChangeMode.LAZY);
-        filterNameTextField.addValueChangeListener(e -> searchForName());
+        filterNameTextField.addValueChangeListener(e -> {
+            this.yearFromIntegerField.clear();
+            this.yearToIntegerField.clear();
+            this.genreComboBox.clear();
+            searchForName();
+        });
+
+        //ComboBox
+        this.genreComboBox.setClearButtonVisible(true);
+        this.genreComboBox.addValueChangeListener(e -> {
+            if (e.getValue() != null) {
+                this.yearFromIntegerField.clear();
+                this.yearToIntegerField.clear();
+                this.filterNameTextField.clear();
+                this.searchForGenre();
+
+            }
+        });
+
     }
 
 
-    /*
-    private List<VideoGame> getTop5Genre(){
-        return ...
-    }*/
+
+    private void setActionOnRangeButton(){
+
+        this.filterNameTextField.clear();
+        this.genreComboBox.clear();
+
+        if (this.yearFromIntegerField.isEmpty() || this.yearToIntegerField.isEmpty()) {
+            Notification notification = new Notification(
+                    "Bitte geben Sie einen Nummerischen Wert in den TextBoxen ein", 3000);
+            notification.open();
+         return;
+        }
+
+        int yearFromInt = this.yearFromIntegerField.getValue();
+        int yearToInt = this.yearToIntegerField.getValue();
+
+        //validation
+        boolean firstNumberLowerThanSecond = yearFromInt <= yearToInt ? true : false;
+        boolean bothNumbersNotNegative = yearFromInt >= 0 && yearToInt >= 0 ? true : false;
+        if(firstNumberLowerThanSecond && bothNumbersNotNegative){
+            searchForYearRange(yearFromInt, yearToInt);
+        }else{
+            Notification notification = new Notification(
+                    "Bitte geben Sie ein gültiges Format ein", 3000);
+            notification.open();
+        }
+
+    }
+
+
+
+    //Search Funktionen
 
     private void searchForName(){
         grid.setItems(vgService.findByNameContaining(filterNameTextField.getValue()));
+    }
+
+    private void searchForGenre(){
+        grid.setItems(vgService.findByGenreContaining(this.genreComboBox.getValue()));
+    }
+
+    private void searchForYearRange(int yearFrom, int yearTo){
+        this.grid.setItems(CollectionOperations.findByRangeYear(yearFrom, yearTo, vgService.findAll()));
+    }
+
+
+    //Layout
+
+    private Component addLayout() {
+
+        searchFromYearToYearButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        searchFromYearToYearButton.addClickListener(click -> setActionOnRangeButton());
+
+        return new HorizontalLayout(filterNameTextField, yearFromIntegerField, yearToIntegerField, searchFromYearToYearButton);
     }
 
 

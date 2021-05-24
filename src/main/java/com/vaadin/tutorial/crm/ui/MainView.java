@@ -20,7 +20,6 @@ public class MainView extends VerticalLayout {
     private VideoGameService vgService;
     private final SearchForm form;
 
-    TextField filterText = new TextField();
 
     public MainView(VideoGameService vgService) {
         this.vgService = vgService;
@@ -38,7 +37,7 @@ public class MainView extends VerticalLayout {
     }
 
     private void configureGrid() {
-        grid.addClassName("contact-grid");
+        grid.addClassName("search-grid");
         grid.setSizeFull();
         grid.removeColumnByKey("na_sales");
         grid.removeColumnByKey("eu_sales");
@@ -46,13 +45,6 @@ public class MainView extends VerticalLayout {
         grid.removeColumnByKey("other_sales");
 
         grid.setColumns("rank", "name", "platform", "year", "genre", "publisher", "global_sales");
-
-
-        /* when strange stuff gets returned
-        grid.addColumn(videoGame -> {
-           Company company = videoGame.getCompany();
-           return company == null ? "-" : company.getName();
-        }).setHeader("Company");*/
 
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }

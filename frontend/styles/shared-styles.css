@@ -3,11 +3,11 @@
   display: flex;
 }
 
-.list-view .contact-grid {
+.list-view .search-grid {
   flex: 2;
 }
 
-.list-view .contact-form {
+.list-view .search-form {
   flex: 1;
   padding: var(--lumo-space-m);
 }

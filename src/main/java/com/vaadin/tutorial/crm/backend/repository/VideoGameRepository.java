@@ -14,5 +14,7 @@ public interface VideoGameRepository extends CrudRepository<VideoGame, Long>{
 
     List<VideoGame> findByNameContaining(String videoGameName);
 
+    List<VideoGame> findByGenreContaining(String genreName);
+
     List<VideoGame> findAll();
 }
