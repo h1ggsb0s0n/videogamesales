@@ -20,7 +20,10 @@ public class MainView extends VerticalLayout {
     private VideoGameService vgService;
     private final SearchForm form;
 
-
+    /**
+     * Constructor
+     * @param vgService
+     */
     public MainView(VideoGameService vgService) {
         this.vgService = vgService;
         addClassName("list-view");
@@ -36,6 +39,9 @@ public class MainView extends VerticalLayout {
         updateList();
     }
 
+    /**
+     * Configuriert das Grid, Aufgrund des platzes werden einige Spalten entfernt
+     */
     private void configureGrid() {
         grid.addClassName("search-grid");
         grid.setSizeFull();
@@ -49,6 +55,9 @@ public class MainView extends VerticalLayout {
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
     }
 
+    /**
+     * Methode Für den Start: Alles wird geladen.
+     */
     private void updateList() {
         grid.setItems(vgService.findAll());
     }
